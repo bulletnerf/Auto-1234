@@ -1,0 +1,40 @@
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Messages to be sent for each button
+local messages = {
+    "1",
+    "2",
+    "3",
+    "4"
+}
+
+-- Function to create and return the GUI buttons
+local function createGUI()
+    -- Create ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "MessageButtonGui"
+    screenGui.Parent = playerGui
+    
+    local buttons = {}
+    
+    -- Create buttons for each message
+    for i, message in ipairs(messages) do
+        local button = Instance.new("TextButton")
+        button.Name = "MessageButton" .. i
+        button.Size = UDim2.new(0, 80, 0, 40) -- Smaller size
+        button.Position = UDim2.new(0, 10 + (i - 1) * 90, 0.1, -20) -- Adjusted spacing
+        button.Text = message
+        button.Font = Enum.Font.GothamBold -- Modern font
+        button.TextSize = 16 -- Adjusted text size
+        button.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+        button.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Dark background
+        button.BorderSizePixel = 0 -- Remove border
+        
+        -- Add hover effect
+        local uiCorner = Instance.new("UICorner") -- Rounded edges
+        uiCorner.CornerRadius = UDim.new(0, 8) -- Rounded corners
+        uiCorner.Parent = button
+
+        button.MouseEnter:Connect(function()
+            button.BackgroundColor3 =
