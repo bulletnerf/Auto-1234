@@ -17,24 +17,93 @@ local function createGUI()
     screenGui.Parent = playerGui
     
     local buttons = {}
-    
-    -- Create buttons for each message
+    local hideShowButton
+
+    -- Create smaller square buttons for each message
     for i, message in ipairs(messages) do
         local button = Instance.new("TextButton")
         button.Name = "MessageButton" .. i
-        button.Size = UDim2.new(0, 80, 0, 40) -- Smaller size
-        button.Position = UDim2.new(0, 10 + (i - 1) * 90, 0.1, -20) -- Adjusted spacing
+        button.Size = UDim2.new(0, 35, 0, 35) -- Buttons now 35x35
+        button.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 45) -- Adjusted position for 35x35 buttons
         button.Text = message
-        button.Font = Enum.Font.GothamBold -- Modern font
-        button.TextSize = 16 -- Adjusted text size
-        button.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-        button.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Dark background
-        button.BorderSizePixel = 0 -- Remove border
+        button.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text color
+        button.BackgroundColor3 = Color3.fromRGB(0, 122, 255) -- Blue background color
+        button.Font = Enum.Font.GothamBold
+        button.TextSize = 14 -- Smaller text size to fit the 35x35 buttons
+        button.TextScaled = true
+        button.Parent = screenGui
         
-        -- Add hover effect
-        local uiCorner = Instance.new("UICorner") -- Rounded edges
-        uiCorner.CornerRadius = UDim.new(0, 8) -- Rounded corners
-        uiCorner.Parent = button
+        -- Add rounded corners to the buttons
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 6) -- Slightly smaller corner radius for small buttons
+        corner.Parent = button
+        
+        -- Add small borders to the buttons
+        button.BorderSizePixel = 2 -- Small border around the button
+        button.BorderColor3 = Color3.fromRGB(0, 0, 0) -- Black border color
 
-        button.MouseEnter:Connect(function()
-            button.BackgroundColor3 =
+        table.insert(buttons, button)
+    end
+    
+    -- Create Hide/Show button
+    hideShowButton = Instance.new("TextButton")
+    hideShowButton.Name = "HideShowButton"
+    hideShowButton.Size = UDim2.new(0, 35, 0, 35) -- 35x35 button size
+    hideShowButton.Position = UDim2.new(0, 10, 0, 10 + #messages * 45) -- Position it below the other buttons
+    hideShowButton.Text = "Hide"
+    hideShowButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text color
+    hideShowButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255) -- Blue background color (same as other buttons)
+    hideShowButton.Font = Enum.Font.GothamBold
+    hideShowButton.TextSize = 14
+    hideShowButton.TextScaled = true
+    hideShowButton.Parent = screenGui
+
+    -- Add rounded corners to the Hide/Show button
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6) -- Rounded corners for consistency
+    corner.Parent = hideShowButton
+    
+    -- Add small borders to the Hide/Show button
+    hideShowButton.BorderSizePixel = 2
+    hideShowButton.BorderColor3 = Color3.fromRGB(0, 0, 0) -- Black border color
+    
+    -- Function to toggle the visibility of the other buttons
+    local function toggleButtonsVisibility()
+        local isVisible = buttons[1].Visible -- Check visibility of the first button
+        for _, button in ipairs(buttons) do
+            button.Visible = not isVisible -- Toggle visibility
+        end
+        if isVisible then
+            hideShowButton.Text = "Show" -- Change text to "Show" when buttons are hidden
+        else
+            hideShowButton.Text = "Hide" -- Change text back to "Hide" when buttons are visible
+        end
+    end
+
+    -- Connect Hide/Show button to toggle functionality
+    hideShowButton.MouseButton1Click:Connect(toggleButtonsVisibility)
+
+    return buttons, hideShowButton
+end
+
+-- Function to send a message using Roblox chat system
+local function sendMessage(message)
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+end
+
+-- Send the custom message once at the start
+sendMessage("Auto 1234 buttons V2 made by cooldude10193/lie detector77")
+
+-- Function to execute actions (send message without emote)
+local function executeActions(message)
+    -- Send the message from the button click
+    sendMessage(message)
+end
+
+-- Create GUI and connect button clicks
+local buttons, hideShowButton = createGUI() -- Create GUI and get the button instances
+for i, button in ipairs(buttons) do
+    button.MouseButton1Click:Connect(function()
+        executeActions(messages[i]) -- Send the respective message without emote
+    end)
+end
