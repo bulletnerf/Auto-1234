@@ -8,6 +8,58 @@ end
 -- Send the auto message when the script executes
 sendMessage("Auto 1234 Keybinds V1 by cooldude10193/liedetector77")
 
+-- Variables for the info bar
+local infoBar
+
+-- Function to create the info bar
+local function createInfoBar()
+    -- Create ScreenGui
+    infoBar = Instance.new("ScreenGui")
+    infoBar.Name = "KeybindInfoBar"
+    infoBar.Parent = player:WaitForChild("PlayerGui")
+
+    -- Create frame to hold the controls
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 200, 0, 150)
+    frame.Position = UDim2.new(0, 10, 0, 10) -- Small bar on the left side
+    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Dark gray background
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = Color3.fromRGB(0, 0, 0) -- Black border
+    frame.Parent = infoBar
+
+    -- Add a title label
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, 0, 0, 20)
+    titleLabel.Position = UDim2.new(0, 0, 0, 0)
+    titleLabel.Text = "Controls"
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextSize = 14
+    titleLabel.Parent = frame
+
+    -- Add a label for each control
+    local controls = {
+        "E: appear",
+        "R: disappear",
+        "Z: Send 1",
+        "X: Send 2",
+        "C: Send 3",
+        "V: Send 4",
+    }
+    for i, text in ipairs(controls) do
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, 0, 0, 20)
+        label.Position = UDim2.new(0, 0, 0, 20 + (i - 1) * 20)
+        label.Text = text
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.BackgroundTransparency = 1
+        label.Font = Enum.Font.Gotham
+        label.TextSize = 12
+        label.Parent = frame
+    end
+end
+
 -- Function to handle key presses
 local function onInputBegan(input, gameProcessed)
     if gameProcessed then return end -- Ignore input if already processed
@@ -16,8 +68,22 @@ local function onInputBegan(input, gameProcessed)
         sendMessage("appear") -- Send "appear" when E is pressed
     elseif input.KeyCode == Enum.KeyCode.R then
         sendMessage("disappear") -- Send "disappear" when R is pressed
+    elseif input.KeyCode == Enum.KeyCode.Z then
+        sendMessage("1") -- Send "1" when Z is pressed
+    elseif input.KeyCode == Enum.KeyCode.X then
+        sendMessage("2") -- Send "2" when X is pressed
+    elseif input.KeyCode == Enum.KeyCode.C then
+        sendMessage("3") -- Send "3" when C is pressed
+    elseif input.KeyCode == Enum.KeyCode.V then
+        sendMessage("4") -- Send "4" when V is pressed
     end
 end
 
 -- Connect to UserInputService to listen for key presses
 game:GetService("UserInputService").InputBegan:Connect(onInputBegan)
+
+-- Create the info bar when the script starts
+createInfoBar()
+
+-- Send the auto message when the script executes
+sendMessage("Auto 1234 Keybinds V1 by cooldude10193/liedetector77")
