@@ -1,0 +1,30 @@
+local player = game.Players.LocalPlayer
+
+-- Messages to be sent for each keybind
+local messages = {
+    [Enum.KeyCode.One] = "1",
+    [Enum.KeyCode.Two] = "2",
+    [Enum.KeyCode.Three] = "3",
+    [Enum.KeyCode.Four] = "4",
+}
+
+-- Function to send a message using Roblox chat system
+local function sendMessage(message)
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+end
+
+-- Send the custom message once at the start
+sendMessage("Auto 1234 keybinds V1 made by cooldude10193/lie detector77")
+
+-- Function to handle key presses
+local function onInputBegan(input, gameProcessed)
+    if gameProcessed then return end -- Ignore input if it is already processed by the game
+
+    local message = messages[input.KeyCode] -- Check if the key pressed is bound to a message
+    if message then
+        sendMessage(message) -- Send the respective message
+    end
+end
+
+-- Connect to UserInputService to listen for key presses
+game:GetService("UserInputService").InputBegan:Connect(onInputBegan)
